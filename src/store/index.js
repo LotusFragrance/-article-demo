@@ -29,10 +29,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    // 登录获取token
     async inLogin (context, data) {
       const { token } = await loginApi(data)
       context.commit('setToken', token)
     },
+    // 获取用户的基本信息
     async getUserinfo (context) {
       const data = await getUserinfo()
       context.commit('setUserInfo', data.data)
@@ -40,10 +42,15 @@ export default new Vuex.Store({
   },
   modules: {},
   getters: {
-    token: state => state.token,
-    userId: state => state.userInfo.id
+    token: (state) => state.token, // token
+    userId: (state) => state.userInfo.id, // 用户ID
+    img: (state) => state.userInfo.user_pic, // 用户图像
+    userName: (state) => state.userInfo.nickname || state.userInfo.username // 用户名称
   },
-  plugins: [createPersistedState({
-    key: 'eventToken'
-  })]
+  plugins: [
+    // 用vuex-persistedstate插件把数据保存在本地存储
+    createPersistedState({
+      key: 'eventToken'
+    })
+  ]
 })

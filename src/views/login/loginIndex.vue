@@ -72,16 +72,21 @@ export default {
   },
   methods: {
     ...mapActions(['inLogin']),
+    ...mapActions(['getUserinfo']),
     onSubmit () {
       this.$refs.form.validate(async (isOk) => {
         // 校验成功
         if (isOk) {
           try {
+            // 获取token
             await this.inLogin(this.form)
             this.$message({
               message: '登录成功!',
               type: 'success'
             })
+            // 获取用户基本信息
+            await this.getUserinfo()
+            // 跳转到首页
             this.$router.push('/')
           } catch (error) {
             console.log(error)

@@ -6,6 +6,8 @@ import store from './store'
 import '@/styles/base.less'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// 字体图标
+import '@/assets/iconfont/iconfont.css'
 // 引入路由守位
 import '@/utils/permission'
 Vue.use(ElementUI)

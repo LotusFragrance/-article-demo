@@ -7,7 +7,30 @@ const routes = [
   {
     path: '/',
     name: 'layout',
-    component: () => import('@/views/layout/pageIndex')
+    component: () => import('@/views/layout/pageIndex'),
+    redirect: '/home',
+    children: [
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/home/homeIndex')
+      },
+      {
+        path: '/article/type',
+        name: 'type',
+        component: () => import('@/views/article/typeIndex')
+      },
+      {
+        path: '/article/list',
+        name: 'list',
+        component: () => import('@/views/article/listIndex')
+      },
+      {
+        path: '/article/publish',
+        name: 'publish',
+        component: () => import('@/views/article/publishArts')
+      }
+    ]
   },
   {
     path: '/login',
