@@ -49,3 +49,29 @@ export function deleteArts (params) {
     params
   })
 }
+
+// 发表文章
+export function publishArts (data) {
+  return request({
+    method: 'POST',
+    url: '/my/article/add',
+    data
+  })
+}
+
+// 获取文章详情
+export function getArtData (params) {
+  return request({
+    url: '/my/article/info',
+    params
+  })
+}
+
+// 更新文章
+export function updataArts (data) {
+  return request({
+    method: 'PUT',
+    url: '/my/article/info',
+    data
+  })
+}

@@ -26,19 +26,19 @@ request.interceptors.response.use(
     // axios默认加了一层data
     const data = response.data
     if (data.code === 0 && response.status === 200) {
-      return data
-    } else if (response.status === 401) {
-      // 身份任证失败
-      Message.error(data.message) // 提示错误消息
-      store.commit('removeToken') // 清除token
-      store.commit('removeUserInfo') // 清除用户信息
-      return Promise.reject(new Error(data.message))
+      return data // 返回数据
     } else {
       Message.error(data.message) // 提示错误消息
       return Promise.reject(new Error(data.message))
     }
   },
   (error) => {
+    // 身份认证失败
+    if (error.response.status === 401) {
+      store.commit('removeToken') // 清除token
+      store.commit('removeUserInfo') // 清除用户信息
+      router.push('/login') // 跳转到登录页面
+    }
     Message.error(error.message) // 提示错误信息
     return Promise.reject(error) // 返回执行错误 让当前的执行链跳出成功 直接进入 catch
   }
