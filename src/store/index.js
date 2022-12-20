@@ -45,7 +45,10 @@ export default new Vuex.Store({
     token: (state) => state.token, // token
     userId: (state) => state.userInfo.id, // 用户ID
     img: (state) => state.userInfo.user_pic, // 用户图像
-    userName: (state) => state.userInfo.nickname || state.userInfo.username // 用户名称
+    userName: (state) => state.userInfo.nickname || state.userInfo.username, // 左边导航栏用户名称
+    username: (state) => state.userInfo.username, // 用户名称
+    nickName: (state) => state.userInfo.nickname, // 用户昵称
+    email: (state) => state.userInfo.email // 用户邮箱
   },
   plugins: [
     // 用vuex-persistedstate插件把数据保存在本地存储

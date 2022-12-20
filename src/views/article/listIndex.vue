@@ -205,17 +205,20 @@ export default {
       this.getArtList(this.page)
       this.currentPage = 1 // 当前页为1
     },
-    // 更新文章列表
+    // 删除后更新文章列表
     initArt () {
-      // 删除最后一篇文章
+      // 解决删除文章列表最后一页数据后出现空白数据的问题
       if (
+        // (this.total - 1) % 2 === 0 判断是否是最后一条数据
+        // Math.ceil(this.total / this.pagesize) 判断是否是最后一页
         (this.total - 1) % 2 === 0 &&
         Math.ceil(this.total / this.pagesize) === this.page
       ) {
-        this.page -= 1
+        this.page -= 1 // 让页码减少一
       }
-      this.getArtList(this.page)
+      this.getArtList(this.page) // 更新文章数据
     },
+    // 修改文章后更新文章列表
     initArts () {
       this.dialogVisible1 = false // 关闭弹窗
       this.getArtList(this.page) // 更新数据

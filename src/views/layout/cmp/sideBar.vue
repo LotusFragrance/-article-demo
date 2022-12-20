@@ -41,19 +41,19 @@
             >
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="3">
+        <el-submenu index="/user">
           <template slot="title">
             <i class="el-icon-user"></i>
             <span>个人中心</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="3-1"
+            <el-menu-item index="/user/info"
               ><i class="el-icon-document"></i>基本资料</el-menu-item
             >
-            <el-menu-item index="3-2"
+            <el-menu-item index="/user/changeimg"
               ><i class="el-icon-camera"></i>更换图像</el-menu-item
             >
-            <el-menu-item index="3-3"
+            <el-menu-item index="/user/resetpassword"
               ><i class="el-icon-unlock"></i>重置密码</el-menu-item
             >
           </el-menu-item-group>

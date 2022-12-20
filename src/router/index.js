@@ -29,6 +29,21 @@ const routes = [
         path: '/article/publish',
         name: 'publish',
         component: () => import('@/views/article/publishArts')
+      },
+      {
+        path: 'user/info',
+        name: 'info',
+        component: () => import('@/views/user/baseInfo')
+      },
+      {
+        path: 'user/resetpassword',
+        name: 'resetpsw',
+        component: () => import('@/views/user/resetPassword')
+      },
+      {
+        path: 'user/changeimg',
+        name: 'changeimg',
+        component: () => import('@/views/user/changeImg')
       }
     ]
   },

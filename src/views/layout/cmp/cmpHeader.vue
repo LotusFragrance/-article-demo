@@ -8,20 +8,14 @@
           fit="cover"
           class="img"
         ></el-avatar>
-        <el-dropdown>
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             个人中心<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              ><i class="el-icon-document"></i>基本资料</el-dropdown-item
-            >
-            <el-dropdown-item
-              ><i class="el-icon-camera"></i>更换图像</el-dropdown-item
-            >
-            <el-dropdown-item
-              ><i class="el-icon-unlock"></i>重置密码</el-dropdown-item
-            >
+            <el-dropdown-item command="a"><i class="el-icon-document"></i>基本资料</el-dropdown-item>
+            <el-dropdown-item command="b"><i class="el-icon-camera"></i>更换图像</el-dropdown-item>
+            <el-dropdown-item command="c"><i class="el-icon-unlock"></i>重置密码</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div @click="loginOut">
@@ -49,8 +43,16 @@ export default {
   methods: {
     loginOut () {
       this.dialogVisible = true
+    },
+    handleCommand (command) {
+      if (command === 'a') {
+        this.$router.push('/user/info')
+      } else if (command === 'b') {
+        this.$router.push('/user/changeimg')
+      } else {
+        this.$router.push('/user/resetpassword')
+      }
     }
-
   }
 }
 </script>
