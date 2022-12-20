@@ -28,7 +28,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <!-- 添加何修改类别弹窗 -->
+    <!-- 添加修改类别弹窗 -->
     <addType :dialogVisible.sync="dialogVisible" @initType="getArtTypeFn()" :judge="judge" :typeData="typeData" />
     <!-- 删除类别弹窗 -->
     <deleteTypes

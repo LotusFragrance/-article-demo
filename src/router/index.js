@@ -16,32 +16,27 @@ const routes = [
         component: () => import('@/views/home/homeIndex')
       },
       {
-        path: '/article/type',
+        path: '/art-cate',
         name: 'type',
         component: () => import('@/views/article/typeIndex')
       },
       {
-        path: '/article/list',
+        path: '/art-list',
         name: 'list',
         component: () => import('@/views/article/listIndex')
       },
       {
-        path: '/article/publish',
-        name: 'publish',
-        component: () => import('@/views/article/publishArts')
-      },
-      {
-        path: 'user/info',
+        path: '/user-info',
         name: 'info',
         component: () => import('@/views/user/baseInfo')
       },
       {
-        path: 'user/resetpassword',
+        path: '/user-pwd',
         name: 'resetpsw',
         component: () => import('@/views/user/resetPassword')
       },
       {
-        path: 'user/changeimg',
+        path: '/user-avatar',
         name: 'changeimg',
         component: () => import('@/views/user/changeImg')
       }

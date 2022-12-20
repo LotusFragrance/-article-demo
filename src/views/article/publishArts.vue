@@ -1,20 +1,20 @@
 <template>
   <div class="publish-container">
     <!-- 头部 -->
-    <headerIndex v-if="!updataArt">
+    <!-- <headerIndex v-if="!updataArt">
       <h3>发表文章</h3>
       <template #button>
         <div style="height: 28px"></div>
       </template>
-    </headerIndex>
+    </headerIndex> -->
     <!-- 文章内容 -->
     <div class="content">
       <!-- 文章标题、类别 -->
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="文章标题">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="文章标题" prop="title" required>
           <el-input v-model="form.title"></el-input>
         </el-form-item>
-        <el-form-item label="文章分类">
+        <el-form-item label="文章分类" prop="cate_id" required>
           <el-select
             v-model="form.cate_id"
             placeholder="请选择文章分类"
@@ -50,10 +50,19 @@
           />
           <div class="img">
             <span v-if="!imgUrl">点击上方”选择封面”</span>
-            <img :src="imgUrl" alt="" v-if="imgUrl" />
+            <el-image
+              style="width: 360px; height: 180px"
+              :src="imgUrl"
+              fit="cover"
+              v-if="imgUrl"
+            ></el-image>
           </div>
-          <el-button type="primary" @click="publicFn">{{ updataArt ? '发布修改' : '发布' }}</el-button>
-          <el-button type="primary" plain @click="draft">{{ updataArt ? '草稿修改' : '存为草稿' }}</el-button>
+          <el-button type="primary" @click="publicFn">{{
+            updataArt ? "发布修改" : "发布"
+          }}</el-button>
+          <el-button type="primary" plain @click="draft">{{
+            updataArt ? "草稿修改" : "存为草稿"
+          }}</el-button>
         </div>
       </div>
     </div>
@@ -64,7 +73,6 @@
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-import headerIndex from './cmp/headIndex.vue'
 import { quillEditor } from 'vue-quill-editor'
 import { getArtType, publishArts, getArtData, updataArts } from '@/api/article'
 export default {
@@ -77,7 +85,6 @@ export default {
     }
   },
   components: {
-    headerIndex,
     quillEditor
   },
   data () {
@@ -89,22 +96,34 @@ export default {
       content: '', // 文章内容
       imgUrl: '', // 文章封面
       artTypes: [], // 文章分类数据
-      file: '' // 图片信息
+      file: '', // 图片信息
+      rules: {
+        title: [
+          { required: true, message: '请输入文章标题', trigger: 'blur' }
+        ],
+        cate_id: [
+          { required: true, message: '请选择文章分类', trigger: 'blur' }
+        ]
+      }
     }
   },
   created () {
     this.getArtType()
-    this.getArtData()
   },
   methods: {
     selectFile () {
       this.$refs.selectFile.click() // 点击添加图片
     },
     checkFile (e) {
-      const windowURL = window.URL || window.webkitURL
-      const dataURL = windowURL.createObjectURL(e.target.files[0]) // 获取图片地址
-      this.imgUrl = dataURL
-      this.file = e.target.files[0] // 获取图片信息
+      if (e.target.files.length === 0) {
+        // 点击了取消了,就恢复默认图片
+        return false
+      } else {
+        const windowURL = window.URL || window.webkitURL
+        const dataURL = windowURL.createObjectURL(e.target.files[0]) // 获取图片地址
+        this.imgUrl = dataURL
+        this.file = e.target.files[0] // 获取图片信息
+      }
     },
     // 获取所有文章类别
     async getArtType () {
@@ -129,48 +148,62 @@ export default {
       return formData
     },
     // 发布文章
-    async publicFn () {
+    publicFn () {
       try {
-        const formData = this.common('已发布')
-        // 判断是添加文章还是更新文章（下同）
-        if (this.updataArt) {
-          await updataArts(formData)
-          this.$message({
-            message: '修改文章成功',
-            type: 'success'
-          })
-          this.$emit('initArts')
-        } else {
-          await publishArts(formData)
-          this.$message({
-            message: '发布成功',
-            type: 'success'
-          })
-          this.$router.push('/article/list') // 添转到文章列表
-        }
+        this.$refs.form.validate(async isOk => {
+          if (isOk) {
+            const formData = this.common('已发布')
+            // 判断是添加文章还是更新文章（下同）
+            if (this.updataArt) {
+              await updataArts(formData)
+              this.$message({
+                message: '修改文章成功',
+                type: 'success'
+              })
+              this.imgUrl = '' // 删除封面图片链接
+              this.file = '' // 删除图片信息
+              this.$emit('initArts')
+            } else {
+              await publishArts(formData)
+              this.$message({
+                message: '发布成功',
+                type: 'success'
+              })
+              this.$emit('initArts')
+              // 清除数据
+              this.deleteData()
+            }
+          }
+        })
       } catch (error) {
         console.log(error)
       }
     },
     // 发布草稿
-    async draft () {
+    draft () {
       try {
-        const formData = this.common('草稿')
-        if (this.updataArt) {
-          await updataArts(formData)
-          this.$message({
-            message: '修改文章成功',
-            type: 'success'
-          })
-          this.$emit('initArts')
-        } else {
-          await publishArts(formData)
-          this.$message({
-            message: '发布草稿成功',
-            type: 'success'
-          })
-          this.$router.push('/article/list') // 添转到文章列表
-        }
+        this.$refs.form.validate(async isOk => {
+          if (isOk) {
+            const formData = this.common('草稿')
+            if (this.updataArt) {
+              await updataArts(formData)
+              this.$message({
+                message: '修改文章成功',
+                type: 'success'
+              })
+              this.imgUrl = '' // 删除封面图片信息
+              this.file = '' // 删除图片信息
+              this.$emit('initArts')
+            } else {
+              await publishArts(formData)
+              this.$message({
+                message: '发布草稿成功',
+                type: 'success'
+              })
+              this.$emit('initArts')
+            }
+          }
+        })
       } catch (error) {
         console.log(error)
       }
@@ -189,6 +222,26 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 清除数据
+    deleteData () {
+      this.form = {
+        title: '', // 标题
+        cate_id: '' // 分类id
+      }
+      this.content = ''
+      this.imgUrl = ''
+      // 清除验证规则
+      this.$refs.form.resetFields()
+    }
+  },
+  watch: {
+    // 监听数据变化，每一次都获取文章数据
+    updataArt: {
+      handler (newval, oldval) {
+        this.getArtData()
+      },
+      immediate: true // 立即侦听
     }
   }
 }
@@ -206,7 +259,7 @@ export default {
       .label {
         display: flex;
         justify-content: end;
-        width: 80px;
+        width: 98px !important;
         padding-right: 12px;
         color: #606266;
         font-size: 14px;
@@ -240,17 +293,13 @@ export default {
         }
         .img {
           margin-bottom: 12px;
-          width: 372px;
-          height: 189px;
+          padding: 5px;
+          width: 370px;
+          height: 190px;
           background-color: #f5f6fa;
           border-radius: 0px 0px 2px 2px;
-          border: 1px solid #999;
           line-height: 189px;
           text-align: center;
-          img {
-            height: 189px;
-            vertical-align: middle;
-          }
         }
       }
     }

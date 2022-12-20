@@ -46,11 +46,11 @@ export default {
     },
     handleCommand (command) {
       if (command === 'a') {
-        this.$router.push('/user/info')
+        this.$router.push('/user-info')
       } else if (command === 'b') {
-        this.$router.push('/user/changeimg')
+        this.$router.push('/user-avatar')
       } else {
-        this.$router.push('/user/resetpassword')
+        this.$router.push('/user-pwd')
       }
     }
   }

@@ -33,7 +33,7 @@
             <el-button @click="resetForm">重置</el-button>
           </el-form-item>
         </el-form>
-        <el-button type="primary" @click="$router.push('/article/publish')"
+        <el-button type="primary" @click="publishArts"
           >发表文章</el-button
         >
       </div>
@@ -86,13 +86,23 @@
       :judgeing="judgeing"
       @initArt="initArt"
     />
-    <!-- 更新文章弹窗 -->
+    <!-- 修改文章弹窗 -->
     <el-dialog
       title="修改文章"
       :visible.sync="dialogVisible1"
       width="70%"
+      :before-close="handleClose1"
     >
-    <publishArts :updataArt="updataArt" @initArts="initArts"/>
+    <publishArts :updataArt="updataArt" @initArts="initArts" ref="updataArt"/>
+    </el-dialog>
+    <!-- 发布文章弹窗 -->
+    <el-dialog
+      title="发布文章"
+      :visible.sync="dialogVisible2"
+      width="70%"
+      :before-close="handleClose">
+    >
+    <publishArts @initArts="initArts1" ref="publishArts"/>
     </el-dialog>
   </div>
 </template>
@@ -126,6 +136,7 @@ export default {
       artData: {}, // 文章数据
       judgeing: '', // 判断是删除类名还是文章
       dialogVisible1: false, // 控制修改文章弹窗
+      dialogVisible2: false, // 控制发布文章弹窗
       updataArt: ''
     }
   },
@@ -155,6 +166,10 @@ export default {
     modifyFn (data) {
       this.dialogVisible1 = true
       this.updataArt = data
+    },
+    // 发布文章
+    publishArts () {
+      this.dialogVisible2 = true
     },
     // 删除文章
     deleteArt (data) {
@@ -222,6 +237,29 @@ export default {
     initArts () {
       this.dialogVisible1 = false // 关闭弹窗
       this.getArtList(this.page) // 更新数据
+    },
+    // 发布文章后更新文章列表
+    async initArts1 () {
+      this.dialogVisible2 = false // 关闭弹窗
+      this.page = Math.ceil((this.total + 1) / this.pagesize) // 来到最后一页
+      await this.getArtList(this.page) // 更新数据
+      this.currentPage = this.page
+    },
+    // 关闭发布文章弹窗触发
+    handleClose () {
+      this.$confirm('此操作会导致文章信息丢失，是否继续？').then(() => {
+        this.dialogVisible2 = false // 关闭弹窗
+        // 清除数据
+        this.$refs.publishArts.deleteData()
+      })
+    },
+    // 关闭修改文章弹窗触发
+    handleClose1 () {
+      this.$confirm('放弃修改文章？').then(() => {
+        this.dialogVisible1 = false // 关闭弹窗
+        // 清除数据
+        this.$refs.updataArt.getArtData()
+      })
     }
   }
 }

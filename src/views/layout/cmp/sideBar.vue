@@ -20,42 +20,26 @@
         unique-opened
         router
       >
-        <el-menu-item index="/home">
-          <i class="el-icon-s-home"></i>
-          <span slot="title">首页</span>
+        <el-menu-item :index="menus.home.indexPath">
+          <i :class="[menus.home.icon]"></i>
+          <span slot="title">{{  menus.home.title }}</span>
         </el-menu-item>
-        <el-submenu index="/article">
+        <el-submenu index="art">
           <template slot="title">
-            <i class="el-icon-menu"></i>
-            <span>文章管理</span>
+            <i :class="[menus.arts.icon]"></i>
+            <span>{{  menus.arts.title }}</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/article/type"
-              ><i class="el-icon-s-operation"></i>文章分类</el-menu-item
-            >
-            <el-menu-item index="/article/list"
-              ><i class="el-icon-notebook-2"></i>文章列表</el-menu-item
-            >
-            <el-menu-item index="/article/publish"
-              ><i class="el-icon-reading"></i>发表文章</el-menu-item
-            >
+            <el-menu-item :index="obj.indexPath" v-for="(obj, index) in menus.arts.children" :key="index"><i :class="[obj.icon]"></i>{{  obj.title }}</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="/user">
+        <el-submenu index="user">
           <template slot="title">
-            <i class="el-icon-user"></i>
-            <span>个人中心</span>
+            <i :class="[menus.user.icon]"></i>
+            <span>{{ menus.user.title }}</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/user/info"
-              ><i class="el-icon-document"></i>基本资料</el-menu-item
-            >
-            <el-menu-item index="/user/changeimg"
-              ><i class="el-icon-camera"></i>更换图像</el-menu-item
-            >
-            <el-menu-item index="/user/resetpassword"
-              ><i class="el-icon-unlock"></i>重置密码</el-menu-item
-            >
+            <el-menu-item :index="obj.indexPath" v-for="(obj, index) in menus.user.children" :key="index"><i :class="[obj.icon]"></i>{{ obj.title }}</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>
@@ -64,10 +48,34 @@
 </template>
 
 <script>
+import { getMenusData } from '@/api/menus'
 export default {
+  created () {
+    this.getMenusData()
+  },
+  data () {
+    return {
+      menus: {
+        home: {},
+        arts: {},
+        user: {}
+      }
+    }
+  },
   methods: {
     errorHandler () {
       return true
+    },
+    // 获取菜单栏数据
+    async getMenusData () {
+      try {
+        const { data } = await getMenusData()
+        this.menus.home = data[0]
+        this.menus.arts = data[1]
+        this.menus.user = data[2]
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
