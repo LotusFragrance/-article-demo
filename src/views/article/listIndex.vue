@@ -101,7 +101,6 @@
       :visible.sync="dialogVisible2"
       width="70%"
       :before-close="handleClose">
-    >
     <publishArts @initArts="initArts1" ref="publishArts"/>
     </el-dialog>
   </div>

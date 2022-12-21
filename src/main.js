@@ -10,6 +10,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/iconfont/iconfont.css'
 // 引入路由守位
 import '@/utils/permission'
+// 引入Echart5
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 

@@ -3,11 +3,11 @@
     <el-row type="flex" justify="space-between" align="middle" class="header">
       <img src="@/assets/images/logo1.png" alt="" />
       <el-row class="right" type="flex" align="middle">
-        <el-avatar
-          :src="$store.getters.img"
-          fit="cover"
-          class="img"
-        ></el-avatar>
+        <el-avatar :src="$store.getters.img" :size="30" @error="errorHandler" class="img">
+        <img
+          src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+        />
+      </el-avatar>
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
             个人中心<i class="el-icon-arrow-down el-icon--right"></i>
@@ -52,6 +52,9 @@ export default {
       } else {
         this.$router.push('/user-pwd')
       }
+    },
+    errorHandler () {
+      return true
     }
   }
 }
