@@ -136,7 +136,7 @@ export default {
       judgeing: '', // 判断是删除类名还是文章
       dialogVisible1: false, // 控制修改文章弹窗
       dialogVisible2: false, // 控制发布文章弹窗
-      updataArt: ''
+      updataArt: {}
     }
   },
   created () {
@@ -257,7 +257,7 @@ export default {
       this.$confirm('放弃修改文章？').then(() => {
         this.dialogVisible1 = false // 关闭弹窗
         // 清除数据
-        this.$refs.updataArt.getArtData()
+        this.$refs.updataArt.deleteData()
       })
     }
   }

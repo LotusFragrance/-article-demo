@@ -29,7 +29,7 @@ export default {
   },
   data () {
     return {
-      imgUrl: '', //
+      imgUrl: this.$store.getters.img, //
       Avatar: '' // 存储转好的base64进制
     }
   },

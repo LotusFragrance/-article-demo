@@ -215,9 +215,12 @@ export default {
           const { data } = await getArtData({
             id: this.updataArt.id
           })
+          console.log(data) // 获取数据
           this.form.title = data.title
           this.form.cate_id = data.cate_id
           this.content = data.content
+          const blob = new Blob([data.cover_img], { type: 'image/*' })
+          this.imgUrl = window.URL.createObjectURL(blob)
         }
       } catch (error) {
         console.log(error)
@@ -231,6 +234,7 @@ export default {
       }
       this.content = ''
       this.imgUrl = ''
+      this.file = '' // 删除图片信息
       // 清除验证规则
       this.$refs.form.resetFields()
     }

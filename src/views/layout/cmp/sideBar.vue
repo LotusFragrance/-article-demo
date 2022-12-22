@@ -13,18 +13,18 @@
     <!-- 导航区域 -->
     <div class="nav">
       <el-menu
-        default-active="/home"
+        :default-active="$route.path"
         class="el-menu-vertical-demo"
         background-color="#24262E"
         text-color="#fff"
         unique-opened
         router
       >
-        <el-menu-item :index="menus.home.indexPath">
+        <el-menu-item index="/home">
           <i :class="[menus.home.icon]"></i>
           <span slot="title">{{  menus.home.title }}</span>
         </el-menu-item>
-        <el-submenu index="art">
+        <el-submenu index="/art">
           <template slot="title">
             <i :class="[menus.arts.icon]"></i>
             <span>{{  menus.arts.title }}</span>
@@ -33,7 +33,7 @@
             <el-menu-item :index="obj.indexPath" v-for="(obj, index) in menus.arts.children" :key="index"><i :class="[obj.icon]"></i>{{  obj.title }}</el-menu-item>
           </el-menu-item-group>
         </el-submenu>
-        <el-submenu index="user">
+        <el-submenu index="/user">
           <template slot="title">
             <i :class="[menus.user.icon]"></i>
             <span>{{ menus.user.title }}</span>
@@ -59,7 +59,8 @@ export default {
         home: {},
         arts: {},
         user: {}
-      }
+      },
+      myPath: '/home'
     }
   },
   methods: {
