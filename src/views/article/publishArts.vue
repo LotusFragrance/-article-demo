@@ -219,7 +219,7 @@ export default {
           this.form.title = data.title
           this.form.cate_id = data.cate_id
           this.content = data.content
-          const blob = new Blob([data.cover_img], { type: 'image/*' })
+          const blob = new Blob([data.cover_img], { type: 'image/jpg' })
           this.imgUrl = window.URL.createObjectURL(blob)
         }
       } catch (error) {
